@@ -24,6 +24,14 @@ ul {
   color: #ffffff;
 }
 
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited,
+.btn-primary:focus {
+	background-color: #000000;
+}
+
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
