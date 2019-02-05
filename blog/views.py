@@ -1,9 +1,10 @@
 import csv
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
+from django.contrib.auth import login
 
 def home(request):
     context ={
@@ -11,7 +12,7 @@ def home(request):
     }
     return render(request, 'blog/home.html', context)
 
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
@@ -53,7 +54,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 def about(request):
-    return render(request, 'blog/about.html', {'title': 'About'})
+    if not request.user.is_authenticated:
+        return redirect('login')
+    else:
+        return render(request, 'blog/about.html', {'title': 'About'})
 
 @permission_required('admin.can_add_log_entry')
 def DataDownload(request):
