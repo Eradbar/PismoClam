@@ -1,6 +1,45 @@
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+	
+
+	<style>
+        .container {
+            width: 500px;
+            margin: 100px auto;
+        }
+        input {
+            width: 300px;
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px;
+        }
+        .remove {
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            background-color: tomato;
+            color: white;
+            border: none;
+            border-radius: 15px;
+        }
+        #addRow, #getValues {
+            width: 130px;
+            height: 40px;
+            font-size: 16px;
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            margin: 20px;
+        }
+        button:hover {
+            cursor: pointer;
+        }
+        tr:hover {
+            cursor: move;
+        }
+    </style>
+
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
@@ -13,4 +52,23 @@
             </div>
         </form>
     </div>
+    
+	<div class="container">
+	    <table>
+	        <tbody>
+	            <tr>
+	                <td><input type="text" name="name"></td>
+	                <td><button class="remove">-</button></td>
+	            </tr>
+	            <tr>
+	                <td><input type="text" name="name"></td>
+	                <td><button class="remove">-</button></td>
+	            </tr>
+	        </tbody>
+	    </table>
+	    <button id="addRow">+ Add</button>
+	    <button id="getValues">Get Values</button>
+	</div>
+		
+    
 {% endblock content %}
