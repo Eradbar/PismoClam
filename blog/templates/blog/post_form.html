@@ -7,6 +7,24 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Survey</legend>
                 {{ form|crispy }}
+                <script>
+					$("#id_content").on('input', function() {
+					    let $this = $(this)
+					    let $clone = $this.clone()
+					    let name = $clone.attr('name')
+					    let n = parseInt(name.split('_')[1]) + 1
+					    name = 'content_' + n
+					    $clone.val('')
+					    $clone.attr('name', name)
+					    $clone.appendTo($this.parent())
+					    $this.removeClass('content-list-new')
+					    $this.off('input', arguments.callee)
+					    $clone.on('input', arguments.callee)
+					})
+				</script>
+                {% for content_field in form.get_content_fields %}
+    				{{ content_field }}
+				{% endfor %}
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Post</button>

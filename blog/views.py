@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from django.contrib.auth import login
+from blog.models import PostForm
 
 def home(request):
     context ={
@@ -22,8 +23,8 @@ class PostDetailView(DetailView):
     model = Post
 
 class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    fields = ['title', 'content']
+    model = PostForm
+    title = ['title']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
