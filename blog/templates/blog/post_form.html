@@ -9,38 +9,60 @@
             margin: 100px auto;
         }
         input {
-            width: 300px;
+            width: 60px;
             font-size: 18px;
-            margin: 10px;
-            padding: 10px;
+            margin: 1px;
+            padding: 2px;
         }
         .remove {
-            width: 30px;
+            width: 50px;
             height: 30px;
             font-size: 20px;
             background-color: tomato;
             color: white;
             border: none;
-            border-radius: 15px;
+            margin: 5px;
+            border-radius: 3px;
+            border: 1px solid #8b0000;
         }
-        #addRow, #getValues {
-            width: 130px;
-            height: 40px;
-            font-size: 16px;
-            background-color: lightseagreen;
+        .remove:hover {
+            background-color: #990000;
+        }
+        .append {
+            width: 110px;
+            height: 30px;
+            font-size: 20px;
+            background-color: DodgerBlue;
             color: white;
             border: none;
-            margin: 20px;
+            margin: 5px;
+            border-radius: 3px;
+            border: 1px solid #003366;
         }
+        .append:hover {
+            background-color: #003366;
+        }
+        
         button:hover {
             cursor: pointer;
         }
         tr:hover {
             cursor: move;
         }
+        .data-content{
+            background-color: White;
+        	width: 300%;
+        	height: 100%;
+        	border: 1px solid #dddddd;
+  			border-radius: 3px;
+        	margin-left: auto;
+        	margin-right: auto;
+        	padding: 4px;
+        	transform: translate(-33.5%, 0);
+        }
     </style>
 
-    <div class="content-section">
+    <!-- <div class="content-section">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -51,24 +73,35 @@
                 <button class="btn btn-outline-info" type="submit">Post</button>
             </div>
         </form>
-    </div>
+    </div> -->
     
-	<div class="container">
-	    <table>
-	        <tbody>
-	            <tr>
-	                <td><input type="text" name="name"></td>
-	                <td><button class="remove">-</button></td>
-	            </tr>
-	            <tr>
-	                <td><input type="text" name="name"></td>
-	                <td><button class="remove">-</button></td>
-	            </tr>
-	        </tbody>
-	    </table>
-	    <button id="addRow">+ Add</button>
-	    <button id="getValues">Get Values</button>
-	</div>
+    <div class="data-content">
+    	<legend class="border-bottom mb-4">Transect Data Sheet</legend>
+	    <div style="overflow-x:auto;">
+	        <fieldset class="form-group">
+	        	<button class="btn btn-outline-info" id="addTopRow">&uarr;  Decrement Section  &uarr;</button>
+		        <table id="dataTable">
+			        <tbody>
+			            <tr>
+			            	<td id="secID"><button class="append">Add Clam</button></td>
+			            	<td>Section 0:</td>
+			                <td><input type="number" name="name"></td>
+			            </tr>
+			            <tr>
+			            	<td id="secID"><button class="append">Add Clam</button></td>
+			            	<td>Section 1:</td>
+			                <td><input type="number" name="name"></td>
+			            </tr>
+			        </tbody>
+			    </table>
+				<button class="btn btn-outline-info" id="addBottomRow">&darr;  Increment Section  &darr;</button>
+	        </fieldset>
+		    <div class="form-group">
+		    	<button class="btn btn-outline-info" id="getValues">Submit</button>
+            </div>
+		</div>
+    </div>
+	
 		
     
 {% endblock content %}

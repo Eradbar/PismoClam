@@ -108,17 +108,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <script>
-var html = '<tr><td><input type="text" name="name"></td><td><button class="remove">-</button></td></tr>';
+var html = '<tr><td>Section 0:</td><td><button class="append">+</button></td><td><input type="number" name="name"></td></tr>';
+var clamSize = '<td><input type="number" name="name"></td>';
+var minPlot = 0;
+var maxPlot = 1;
  
-$(function() {
-    $('tbody').sortable();
- 
-    $('#addRow').click(function(){
-        $('tbody').append(html);
+$(function() { 
+    $('#addBottomRow').click(function(){
+    	maxPlot++;
+        $('tbody').append('<tr><td><button class="append">Add Clam</button></td><td>Section ' + maxPlot + ':</td><td><input type="number" name="name"></td></tr>');
+    });
+    
+    $('#addTopRow').click(function(){
+    	minPlot--;
+        $('tbody').prepend('<tr><td><button class="append">Add Clam</button></td><td>Section ' + minPlot + ':</td><td><input type="number" name="name"></td></tr>');
     });
  
     $(document).on('click', '.remove', function() {
-        $(this).parents('tr').remove();
+        $(this).parents('tr').contains(clamSize).html('');
+    });
+    
+    $(document).on('click', '.append', function() {
+        $(this).parents('tr').append(clamSize);
     });
  
     $('#getValues').click(function(){
