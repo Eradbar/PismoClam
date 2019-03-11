@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView,DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Survey
 from django.contrib.auth import login
 
 def home(request):
@@ -58,6 +58,17 @@ def about(request):
         return redirect('login')
     else:
         return render(request, 'blog/about.html', {'title': 'About'})
+    
+def PackClam(request):
+    clamInstance = Survey()
+    clamInstance.location = request.POST['location']
+    clamInstance.region = request.POST['Region']
+    clamInstance.transNumber = request.POST['TransectNumber']
+    clamInstance.startLat = request.POST['Slat']
+    clamInstance.startLong = request.POST['Slon']
+    clamInstance.endLat = request.POST['Elat']
+    clamInstance.endLong = request.POST['Elon']
+    clamInstance.clams = request.POST['clamSizeList']
 
 @permission_required('admin.can_add_log_entry')
 def DataDownload(request):

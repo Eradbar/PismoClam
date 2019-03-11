@@ -20,6 +20,14 @@
 </head>
 
 <style>
+	input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+	    -webkit-appearance: none;
+	    margin: 0;
+	}
+	 
+	input[type="number"] {
+	    -moz-appearance: textfield;
+	}
 	#bg {
 		position: fixed; 
 	  	top: -50%; 
@@ -108,20 +116,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <script>
-var html = '<tr><td>Section 0:</td><td><button class="append">+</button></td><td><input type="number" name="name"></td></tr>';
-var clamSize = '<td><input type="number" name="name"></td>';
+var html = '<tr><td>Section 0:</td><td><button class="append">+</button></td><td><input type="number" name="clamSize"></td></tr>';
+var clamSize = '<td><input type="number" name="clamSize"></td>';
 var minPlot = 0;
 var maxPlot = 1;
  
 $(function() { 
     $('#addBottomRow').click(function(){
     	maxPlot++;
-        $('tbody').append('<tr><td><button class="append">Add Clam</button></td><td>Section ' + maxPlot + ':</td><td><input type="number" name="name"></td></tr>');
+        $('tbody').append('<tr><td><button class="append" type="button">Add</button></td><td>' + maxPlot + ':</td><td><input type="number" name="name"></td></tr>');
     });
     
     $('#addTopRow').click(function(){
     	minPlot--;
-        $('tbody').prepend('<tr><td><button class="append">Add Clam</button></td><td>Section ' + minPlot + ':</td><td><input type="number" name="name"></td></tr>');
+        $('tbody').prepend('<tr><td><button class="append" type="button">Add</button></td><td>' + minPlot + ':</td><td><input type="number" name="name"></td></tr>');
     });
  
     $(document).on('click', '.remove', function() {
@@ -133,11 +141,29 @@ $(function() {
     });
  
     $('#getValues').click(function(){
+    	var table = document.getElementById('dataTable');
+    	var counter = 0;
+    	var values = [];
+    	var clams = [];
+    	
         var values = [];
-        $('input[name="name"]').each(function(i, elem){
-            values.push($(elem).val());
+        $('input[name="clamSize"]').each(function(i, elem){
+            clams.push($(elem).val());
         });
-        alert(values.join(', '));
+    	
+    	for (var r = 0, n = table.rows.length; r < n; r++){
+    		values.push(table.rows[r].cells[1].innerHTML)
+    		for(var c = 0, m = table.rows[r].cells.length - 2; c < m; c++){
+        		values.push(clams[counter]);
+        		counter++;
+    		}
+    	}
+    	
+    	document.getElementById('clamSizeList').value = values;
+    	
+    	alert(values);  	
+
+        //alert(values.join(' '));
     });
 });
 </script>

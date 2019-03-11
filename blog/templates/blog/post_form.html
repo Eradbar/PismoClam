@@ -5,11 +5,11 @@
 
 	<style>
         .container {
-            width: 500px;
+            width: 50%;
             margin: 100px auto;
         }
         input {
-            width: 60px;
+            width: 40px;
             font-size: 18px;
             margin: 1px;
             padding: 2px;
@@ -29,7 +29,7 @@
             background-color: #990000;
         }
         .append {
-            width: 110px;
+            width: 50px;
             height: 30px;
             font-size: 20px;
             background-color: DodgerBlue;
@@ -53,12 +53,24 @@
         	position: fixed;
     		top: 0; right: 0; bottom: 0; left: 0;
         	overflow-y:auto;
-        	overflow-x:auto;
+        	overflow-x:hidden;
             background-color: White;
         	border: 1px solid #dddddd;
   			border-radius: 3px;
         	padding: 4px;
         }
+        .mytext {
+		    width: 100%;
+		}
+		.scrolling-wrapper {
+		  overflow-x: scroll;
+		  overflow-y: hidden;
+		  white-space: nowrap;
+		
+		  .tableRow {
+		    display: inline-block;
+		  }
+		}
     </style>
 
     <!-- <div class="content-section">
@@ -77,30 +89,47 @@
     <div class="data-content">
     	<legend class="border-bottom mb-4">Transect Data Sheet</legend>
 	    <div>
-	        <fieldset class="form-group">
-	        	<button style="width: 100%;" class="btn btn-outline-info" type="button" id="addTopRow">&uarr;  Decrement Section  &uarr;</button>
-		        <table id="dataTable">
-			        <tbody>
-			            <tr>
-			            	<td id="secID"><button class="append">Add Clam</button></td>
-			            	<td>Section 0:</td>
-			                <td><input type="number" name="name"></td>
-			            </tr>
-			            <tr>
-			            	<td id="secID"><button class="append">Add Clam</button></td>
-			            	<td>Section 1:</td>
-			                <td><input type="number" name="name"></td>
-			            </tr>
-			        </tbody>
-			    </table>
-				<button style="width: 100%;" class="btn btn-outline-info" type="button" id="addBottomRow">&darr;  Increment Section  &darr;</button>
-	        </fieldset>
-		    <div class="form-group">
-		    	<button style="width: 100%;" class="btn btn-outline-info" type="button" id="getValues">Submit</button>
-            </div>
+	    	<form>
+	    		<fieldset class="form-group">
+	    			<div class="row" style="padding:1%;margin:auto;">
+		    			<div class="col-md-6">
+			    			Location:<br><input type="text" name="location" class="mytext"><br>
+					        Region:<br><input type="text" name="Region" class="mytext"><br>
+					        Date:<br><input type="text" name="Date" class="mytext"><br>
+					        Transect Number:<br><input type="text" name="TransectNumber" class="mytext"><br>
+						</div>
+				        <div class="col-md-6">
+					        Start latitude:<br><input type="text" name="Slat" class="mytext"><br>
+				            Start longitude:<br><input type="text" name="Slon" class="mytext"><br>
+			    		    End latitude:<br><input type="text" name="Elat" class="mytext"><br>
+					        End longitude:<br><input type="text" name="Elon" class="mytext"><br>
+				        </div>
+	    			</div>
+		        	<button style="width: 100%;" class="btn btn-outline-info" type="button" id="addTopRow">&uarr;  Decrement Section  &uarr;</button>
+			        <div class="scrolling-wrapper">
+				        <table id="dataTable">
+			        		<tbody>
+					            <tr>
+					            	<td id="secID"><button class="append" type="button">Add</button></td>
+					            	<td>0:</td>
+					            	<td><input type="number" name="clamSize"></td>
+					            </tr>
+					            <tr>
+					            	<td id="secID"><button class="append" type="button">Add</button></td>
+					            	<td>1:</td>
+					                <td><input type="number" name="clamSize"></td>
+					            </tr>
+					        </tbody>
+					    </table>
+					 </div>
+					<button style="width: 100%;" class="btn btn-outline-info" type="button" id="addBottomRow">&darr;  Increment Section  &darr;</button>
+		        </fieldset>
+		        <input type="text" id="clamSizeList" name="clamSizeList" style="display:none">
+			    <div class="form-group">
+			    	<button style="width: 100%;" class="btn btn-outline-info" type="button" id="getValues">Submit</button>
+	            </div>
+	    	</form>
 		</div>
     </div>
-	
-		
     
 {% endblock content %}

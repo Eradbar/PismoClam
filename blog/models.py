@@ -16,19 +16,19 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
     
-class Clam(models.Model):
+class Survey(models.Model):
     location = models.CharField(max_length = 100)
     region = models.CharField(max_length = 100)
-    dateSampled = models.DateField()
+    dateSampled = models.DateTimeField(default=timezone.now)
     transNumber = models.IntegerField()
     startLat = models.FloatField()
     startLong = models.FloatField()
     endLat = models.FloatField()
     endLong = models.FloatField()
-    sectNumber = models.IntegerField()
-    size = models.IntegerField()
+    clams = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
+    rawData = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    
-    def __str__(self):
+
+    def str(self):
         return self.size
