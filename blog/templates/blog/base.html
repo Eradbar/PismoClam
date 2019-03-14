@@ -70,7 +70,7 @@
 		                        <a class="dropdown-item" href="{% url 'blog-about' %}">About</a>
 		                        <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
 					        	{% if user.is_staff %}
-					        		<a class="dropdown-item" href="{% url 'post-create' %}">New Survey</a>
+					        		<a class="dropdown-item" href="{% url 'beach' %}">New Survey</a>
 					          	{% endif %}
 		                    </div>
 		                </li>
@@ -124,12 +124,12 @@ var maxPlot = 1;
 $(function() { 
     $('#addBottomRow').click(function(){
     	maxPlot++;
-        $('tbody').append('<tr><td><button class="append" type="button">Add</button></td><td>' + maxPlot + ':</td><td><input type="number" name="name"></td></tr>');
+        $('tbody').append('<tr><td><button class="append" type="button">Add</button></td><td>' + maxPlot + ':</td><td><input type="number" name="clamSize"></td></tr>');
     });
     
     $('#addTopRow').click(function(){
     	minPlot--;
-        $('tbody').prepend('<tr><td><button class="append" type="button">Add</button></td><td>' + minPlot + ':</td><td><input type="number" name="name"></td></tr>');
+        $('tbody').prepend('<tr><td><button class="append" type="button">Add</button></td><td>' + minPlot + ':</td><td><input type="number" name="clamSize"></td></tr>');
     });
  
     $(document).on('click', '.remove', function() {
@@ -140,30 +140,33 @@ $(function() {
         $(this).parents('tr').append(clamSize);
     });
  
-    $('#getValues').click(function(){
+    $('#submit-id-submit').click(function(){
     	var table = document.getElementById('dataTable');
     	var counter = 0;
     	var values = [];
     	var clams = [];
     	
-        var values = [];
+    	var clamString = ""
+    	
         $('input[name="clamSize"]').each(function(i, elem){
             clams.push($(elem).val());
         });
     	
     	for (var r = 0, n = table.rows.length; r < n; r++){
     		values.push(table.rows[r].cells[1].innerHTML)
+    		clamString = clamString + table.rows[r].cells[1].innerHTML
     		for(var c = 0, m = table.rows[r].cells.length - 2; c < m; c++){
         		values.push(clams[counter]);
+        		clamString = clamString + " " + clams[counter]
         		counter++;
     		}
+    		values.push("\n")
+    		clamString = clamString + "\n"
     	}
     	
-    	document.getElementById('clamSizeList').value = values;
+    	document.getElementById('id_clams').value = clamString;
     	
-    	alert(values);  	
-
-        //alert(values.join(' '));
+    	//alert(values);  	
     });
 });
 </script>

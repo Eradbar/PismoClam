@@ -17,6 +17,7 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
     
 class Survey(models.Model):
+    surveyName = models.CharField(max_length = 100)
     location = models.CharField(max_length = 100)
     region = models.CharField(max_length = 100)
     dateSampled = models.DateTimeField(default=timezone.now)
@@ -26,9 +27,13 @@ class Survey(models.Model):
     endLat = models.FloatField()
     endLong = models.FloatField()
     clams = models.TextField()
+    waterTemp = models.CharField(max_length = 100)
+    airTemp = models.CharField(max_length = 100)
     date_posted = models.DateTimeField(default=timezone.now)
-    rawData = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    
     def str(self):
-        return self.size
+        return self.surveyName
+    
+    def get_absolute_url(self):
+        return reverse('survey-detail', kwargs={'pk': self.pk})

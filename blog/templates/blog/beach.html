@@ -1,0 +1,96 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<style>
+        /* The container must be positioned relative: */
+		.custom-select {
+		  position: relative;
+		  font-family: Arial;
+		}
+		
+		.custom-select select {
+		  display: none; /*hide original SELECT element: */
+		}
+		
+		.select-selected {
+		  background-color: DodgerBlue;
+		}
+		
+		/* Style the arrow inside the select element: */
+		.select-selected:after {
+		  position: absolute;
+		  content: "";
+		  top: 14px;
+		  right: 10px;
+		  width: 0;
+		  height: 0;
+		  border: 6px solid transparent;
+		  border-color: #fff transparent transparent transparent;
+		}
+		
+		/* Point the arrow upwards when the select box is open (active): */
+		.select-selected.select-arrow-active:after {
+		  border-color: transparent transparent #fff transparent;
+		  top: 7px;
+		}
+		
+		/* style the items (options), including the selected item: */
+		.select-items div,.select-selected {
+		  color: #ffffff;
+		  padding: 8px 16px;
+		  border: 1px solid transparent;
+		  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+		  cursor: pointer;
+		}
+		
+		/* Style items (options): */
+		.select-items {
+		  position: absolute;
+		  background-color: DodgerBlue;
+		  top: 100%;
+		  left: 0;
+		  right: 0;
+		  z-index: 99;
+		}
+		
+		/* Hide the items when the select box is closed: */
+		.select-hide {
+		  display: none;
+		}
+		
+		.select-items div:hover, .same-as-selected {
+		  background-color: rgba(0, 0, 0, 0.1);
+		}
+		
+		.beachDiv {
+			margin-top:0;
+			margin-right:auto;
+			margin-bottom:0;
+			margin-left:auto;
+		}
+    </style>
+    
+    <div class="content-section">
+    	<form action="" method="post">
+    	    {% csrf_token %}
+    		Select Beach: <select name="beachValue" class="custom-select" style="width:100%;">
+				<option name="pismo">Pismo Beach</option>
+				<option name="morro">Morro Bay</option>
+				<option name="cayucos">Cayucos Beach</option>
+				<option name="oceano">Oceano Beach</option>
+				<option name="coronado">Coronado Beach</option>
+				<option name="zuma">Zuma Beach</option>
+				<option name="huntington">Huntington Beach</option>
+				<option name="imperial">Imperial Beach</option>
+				<option name="moonlight">Moonlight Beach</option>
+				<option name="silverStrand">Silver Strand Beach</option>
+				<option name="santaMonica">Santa Monica Beach</option>
+				<option name="avila">Avila Beach</option>
+				<option name="pointMugu">Point Mugu Beach</option>
+				<option name="notListed">Not Listed</option>
+			</select>
+        	<button class="btn btn-outline-info" type="submit" id="getValues">Submit</button>
+    	</form>
+    </div>
+    
+{% endblock content %}
