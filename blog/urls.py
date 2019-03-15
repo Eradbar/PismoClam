@@ -4,8 +4,7 @@ from .views import (
     PostDetailView,
     selectBeach,
     PostDeleteView,
-    DataDownload,
-    PackClam
+    DataDownload
 )
 from . import views
 from blog.views import SurveyView
@@ -18,6 +17,6 @@ urlpatterns = [
     path('post/<int:pk>/update', SurveyView.as_view(), name='survey-update'),
     path('post/<int:pk>/delete', PostDeleteView.as_view(), name='survey-delete'),
     path('about/', views.about, name='blog-about'),
-    path('download/', DataDownload, name='blog-download_survey'),
+    path('post/<int:pk>/download/', DataDownload, name='blog-download_survey'),
 ]
 

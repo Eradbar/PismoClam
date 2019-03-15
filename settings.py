@@ -25,7 +25,7 @@ SECRET_KEY = 'o+35zhd3ma(gyn4@hvo2#&g0g(hq2+470p)o8f*ama!ufvd@zt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pismoclamweb.pythonanywhere.com']
 
 
 # Application definition

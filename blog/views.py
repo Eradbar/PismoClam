@@ -7,6 +7,8 @@ from .models import Post, Survey
 from django.contrib.auth import login
 from django.views.generic.base import TemplateView
 
+from django.http import HttpResponse
+
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from blog.forms import SurveyForm
@@ -19,6 +21,9 @@ from datetime import datetime
 
 import blog.transferBeachValue
 from blog import forms
+from test.test_warnings.data.stacklevel import inner
+
+import datetime
 
 BEACHES = {
     "Pismo Beach": "pismo",
@@ -65,8 +70,6 @@ websiteLibrary = {
     "pointMuguTC": "https://www.weatherforyou.com/reports/index.php?config=&forecast=zandh&pands=Point+Mugu&Submit=Get+Weather"
 }
 
-
-
 def home(request):
     context ={
         'surveys': Survey.objects.all()
@@ -84,7 +87,6 @@ class selectBeach(LoginRequiredMixin, TemplateView):
         
     def post(self,request):
         blog.transferBeachValue.beach = request.POST.get('beachValue', "")
-        print("2"+blog.transferBeachValue.beach)
         return redirect('survey-create')
 
     
@@ -148,11 +150,16 @@ class SurveyView(LoginRequiredMixin, TemplateView):
             form.fields["clams"].initial = Survey.objects.only('clams').get(pk=kwargs.get('pk')).clams
             form.fields["waterTemp"].initial = Survey.objects.only('waterTemp').get(pk=kwargs.get('pk')).waterTemp
             form.fields["airTemp"].initial = Survey.objects.only('airTemp').get(pk=kwargs.get('pk')).airTemp
+            form.fields["startTime"].initial = Survey.objects.only('startTime').get(pk=kwargs.get('pk')).startTime
+            form.fields["endTime"].initial = Survey.objects.only('endTime').get(pk=kwargs.get('pk')).endTime
+            form.fields["lowTideTime"].initial = Survey.objects.only('lowTideTime').get(pk=kwargs.get('pk')).lowTideTime
+            form.fields["lowTide"].initial = Survey.objects.only('lowTide').get(pk=kwargs.get('pk')).lowTide
         else:
             form.fields["location"].initial = beach            
             form.fields["waterTemp"].initial = sTemp
-            form.fields["airTemp"].initial = airTemp  
-            #form.fields["clams"].widget = 
+            form.fields["airTemp"].initial = airTemp
+            form.fields["dateSampled"].initial = datetime.datetime.today() 
+            form.fields["clams"].initial = "No need to type anything here. This will be filled in automatically."
         
         args = {'form': form}
         return render(request, self.template_name, args)
@@ -169,6 +176,7 @@ class SurveyView(LoginRequiredMixin, TemplateView):
                 surveyName = form.cleaned_data['surveyName']
                 location = form.cleaned_data['location']
                 region = form.cleaned_data['region']
+                dateSampled = form.cleaned_data['dateSampled']
                 transNumber = form.cleaned_data['transNumber']
                 startLat = form.cleaned_data['startLat']
                 startLong = form.cleaned_data['startLong']
@@ -177,6 +185,10 @@ class SurveyView(LoginRequiredMixin, TemplateView):
                 clams = form.cleaned_data['clams']
                 waterTemp = form.cleaned_data['waterTemp']
                 airTemp = form.cleaned_data['airTemp']
+                startTime = form.cleaned_data['startTime']
+                endTime = form.cleaned_data['endTime']
+                lowTideTime = form.cleaned_data['lowTideTime']
+                lowTide = form.cleaned_data['lowTide']
                 return redirect('blog-home')
         else:
             form = SurveyForm(request.POST)
@@ -184,6 +196,7 @@ class SurveyView(LoginRequiredMixin, TemplateView):
                 Survey.objects.filter(pk=kwargs.get('pk')).update(surveyName=form.cleaned_data['surveyName'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(location=form.cleaned_data['location'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(region=form.cleaned_data['region'])
+                Survey.objects.filter(pk=kwargs.get('pk')).update(dateSampled=form.cleaned_data['dateSampled'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(transNumber=form.cleaned_data['transNumber'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(startLat=form.cleaned_data['startLat'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(startLong=form.cleaned_data['startLong'])
@@ -192,6 +205,10 @@ class SurveyView(LoginRequiredMixin, TemplateView):
                 Survey.objects.filter(pk=kwargs.get('pk')).update(clams=form.cleaned_data['clams'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(waterTemp=form.cleaned_data['waterTemp'])
                 Survey.objects.filter(pk=kwargs.get('pk')).update(airTemp=form.cleaned_data['airTemp'])
+                Survey.objects.filter(pk=kwargs.get('pk')).update(startTime=form.cleaned_data['startTime'])
+                Survey.objects.filter(pk=kwargs.get('pk')).update(endTime=form.cleaned_data['endTime'])
+                Survey.objects.filter(pk=kwargs.get('pk')).update(lowTideTime=form.cleaned_data['lowTideTime'])
+                Survey.objects.filter(pk=kwargs.get('pk')).update(lowTide=form.cleaned_data['lowTide'])
             return redirect('blog-home')
             
         args = {'form': form}
@@ -202,30 +219,65 @@ def about(request):
         return redirect('login')
     else:
         return render(request, 'blog/about.html', {'title': 'About'})
-    
-def PackClam(request):
-    SurveyInstance = Survey(request.POST)
-    SurveyInstance.surveyName = request.POST['SurveyName']
-    SurveyInstance.location = request.POST['location']
-    SurveyInstance.region = request.POST['Region']
-    SurveyInstance.transNumber = request.POST['TransectNumber']
-    SurveyInstance.startLat = request.POST['Slat']
-    SurveyInstance.startLong = request.POST['Slon']
-    SurveyInstance.endLat = request.POST['Elat']
-    SurveyInstance.endLong = request.POST['Elon']
-    SurveyInstance.clams = request.POST['clamSizeList']
 
 @permission_required('admin.can_add_log_entry')
-def DataDownload(request):
-    items = Survey.objects.all()
-
+def DataDownload(request, **kwargs):
+    item = kwargs.get('pk')
+    
+    location = Survey.objects.only('location').get(pk=kwargs.get('pk')).location
+    region = Survey.objects.only('region').get(pk=kwargs.get('pk')).region
+    date = Survey.objects.only('region').get(pk=kwargs.get('pk')).dateSampled
+    transNumber = Survey.objects.only('transNumber').get(pk=kwargs.get('pk')).transNumber
+    startLat = Survey.objects.only('startLat').get(pk=kwargs.get('pk')).startLat
+    startLong = Survey.objects.only('startLong').get(pk=kwargs.get('pk')).startLong
+    endLat = Survey.objects.only('endLat').get(pk=kwargs.get('pk')).endLat
+    endLong = Survey.objects.only('endLong').get(pk=kwargs.get('pk')).endLong
+    clamData = Survey.objects.only('clams').get(pk=kwargs.get('pk')).clams
+    
+    filename = str(date) + str(location) + str(transNumber)
+    
     response = HttpResponse(content_type='text/csv')
-    response['Content-Dispostion'] = 'attachment; filename="pismoClamSurvey.csv"'
+    response['Content-Disposition'] = 'attachment; filename=' + filename + '".csv"'
 
     writer = csv.writer(response, delimiter=',')
-    writer.writerow(['title', 'content'])
-
-    for obj in items:
-        writer.writerow([obj.title, obj.content])
+    writer.writerow(['location', 'region', 'date', 'transNumber', 'startLat', 'startLong', 'endLat', 'endLong', 'section', 'size'])
+    
+    i = 0
+    j = 0
+    outerClamArray = []
+    innerClamArray = []
+    size = ""
+    
+    while j < len(clamData):
+        if(clamData[j] is '\n'):
+            outerClamArray.append(innerClamArray)
+            innerClamArray = []
+            size = ""
+        elif ((clamData[j] is not ':') and (clamData[j] is not ' ') and (clamData[j] is not '\r')):
+            size += clamData[j]
+        elif (size is ""):
+            size = size
+        else:
+            innerClamArray.append(size)
+            size = ""
+        j = j + 1
+    innerClamArray.append(size)
+    outerClamArray.append(innerClamArray)
+            
+    i = 0
+    j = 0
+    for section in outerClamArray:
+        max = len(section)
+        while(i is not max):
+            if i == 0:
+                sec = outerClamArray[j][i];
+                i = i + 1
+            else:
+                writer.writerow([location, region, date, transNumber, startLat, startLong, endLat, endLong, sec, outerClamArray[j][i]])
+                i = i + 1
+        i = 0
+        j = j + 1
+    #for obj in items:
+    #    writer.writerow([obj.title, obj.content])
 
     return response

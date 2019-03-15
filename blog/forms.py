@@ -17,20 +17,31 @@ class SurveyForm(forms.ModelForm):
     startLong = forms.FloatField(label='Start Longitude')
     endLat = forms.FloatField(label='End Latitude')
     endLong = forms.FloatField(label='End Longitude')
+    startTime = forms.CharField(label='Start Time')
+    endTime = forms.CharField(label='End Time')
+    lowTideTime = forms.CharField(label='Low Tide Time')
+    lowTide = forms.CharField(label='Low Tide Height')
     clams = forms.TextInput()
-    waterTemp = forms.CharField(label = "Sea Temperature")
-    airTemp = forms.CharField(label = "Temperature")
+    waterTemp = forms.CharField(label='Sea Temperature')
+    airTemp = forms.CharField(label='Temperature')
     
     class Meta:
         model = Survey
         fields = {'surveyName', 'location', 'region', 'dateSampled', 'transNumber', 'startLat',
-                  'startLong', 'endLat', 'endLong', 'clams', 'waterTemp', 'airTemp'}
+                  'startLong', 'endLat', 'endLong', 'clams', 'waterTemp', 'airTemp', 'startTime',
+                  'endTime', 'lowTideTime', 'lowTide'}
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'surveyName',
+            Row(
+                Column('startTime', css_class='form-group col-md-6 mb-0'),
+                Column('endTime', css_class='form-group col-md-6 mb-0'),
+                Column('lowTideTime', css_class='form-group col-md-6 mb-0'),
+                Column('lowTide', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'),
             Row(
                 Column('location', css_class='form-group col-md-6 mb-0'),
                 Column('region', css_class='form-group col-md-6 mb-0'),

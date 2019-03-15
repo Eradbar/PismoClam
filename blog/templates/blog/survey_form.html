@@ -78,6 +78,27 @@
 		    display: inline-block;
 		  }
 		}
+		.startButton {
+		  -webkit-transition-duration: 0.4s; /* Safari */
+		  transition-duration: 0.4s;
+		  width: 100px
+		}
+		
+		.startButton:hover {
+		  background-color: #4CAF50; /* Green */
+		  color: white;
+		}
+		.stopButton {
+		  -webkit-transition-duration: 0.4s; /* Safari */
+		  transition-duration: 0.4s;
+		  width: 100px
+		}
+		
+		.stopButton:hover {
+		  background-color: red; /* Green */
+		  color: white;
+		}
+		...
     </style>
 
     <div class="data-content">
@@ -86,7 +107,7 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Survey</legend>
                 {% if request.get_full_path == "/post/new/" %}
-		   	      	<button style="width: 100%;" class="btn btn-outline-info" type="button" id="addTopRow">&uarr;  Decrement Section  &uarr;</button>
+		   	      	<button style="width: 100%; margin-top:1%" class="btn btn-outline-info" type="button" id="addTopRow">&uarr;  Decrement Section  &uarr;</button>
 			        <div class="scrolling-wrapper">
 				        <table id="dataTable">
 			        		<tbody>
@@ -104,6 +125,8 @@
 					    </table>
 					 </div>
 					 <button style="width: 100%;" class="btn btn-outline-info" type="button" id="addBottomRow">&darr;  Increment Section  &darr;</button>
+					 <input class="startButton" id="getStartTime" type="button" value="Start" />
+					 <input class="stopButton" id="getEndTime" type="button" value="End" />
             	 {% endif %}
     	      	 {% crispy form %}
             </fieldset>

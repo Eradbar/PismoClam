@@ -122,6 +122,11 @@ var minPlot = 0;
 var maxPlot = 1;
  
 $(function() { 
+	// For the time now
+	Date.prototype.timeNow = function () {
+	     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+	}
+	
     $('#addBottomRow').click(function(){
     	maxPlot++;
         $('tbody').append('<tr><td><button class="append" type="button">Add</button></td><td>' + maxPlot + ':</td><td><input type="number" name="clamSize"></td></tr>');
@@ -138,6 +143,16 @@ $(function() {
     
     $(document).on('click', '.append', function() {
         $(this).parents('tr').append(clamSize);
+    });
+    
+    $('#getStartTime').click(function(){
+    	var newDate = new Date()
+    	document.getElementById('id_startTime').value = newDate.timeNow();
+    });
+    
+    $('#getEndTime').click(function(){
+    	var newDate = new Date()
+    	document.getElementById('id_endTime').value = newDate.timeNow();
     });
  
     $('#submit-id-submit').click(function(){
